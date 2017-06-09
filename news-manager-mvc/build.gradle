@@ -1,0 +1,103 @@
+subprojects {
+
+    apply plugin: "java"
+    apply plugin: "idea"
+    group = "org.xioa"
+    version = "1.0"
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    ext {
+        slf4jVersion = "1.7.7"
+        springVersion = "4.2.1.RELEASE"
+        hibernateVersion = "4.3.1.Final"
+        mybatisVersion = "3.2.8"
+        mybatisSprignVersion = "1.2.3"
+    }
+
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        compile(
+
+                "org.springframework:spring-webmvc:$springVersion",
+                "org.springframework:spring-orm:$springVersion",
+                "org.springframework:spring-context-support:$springVersion",
+                "org.springframework:spring-websocket:$springVersion",
+                "org.springframework:spring-messaging:$springVersion",
+
+                "mysql:mysql-connector-java:5.1.36",
+                "org.mybatis:mybatis-spring:$mybatisSprignVersion",
+                "org.mybatis:mybatis:$mybatisVersion",
+                "com.alibaba:druid:1.0.16",
+                "com.alibaba:fastjson:1.2.7",
+
+                /*slf4j*/
+                "org.slf4j:slf4j-api:1.6.4",
+                "org.slf4j:slf4j-log4j12:1.6.4",
+                "commons-codec:commons-codec:1.8",
+                "commons-lang:commons-lang:2.4",
+                "org.aspectj:aspectjweaver:1.6.12",
+                "commons-fileupload:commons-fileupload:1.3.1",
+
+                /*gson*/
+                "com.google.code.gson:gson:2.4",
+
+                "com.fasterxml.jackson.core:jackson-core:2.8.0",
+                "com.fasterxml.jackson.core:jackson-databind:2.8.0",
+                "com.fasterxml.jackson.core:jackson-annotations:2.8.0",
+
+                "com.github.bingoohuang:patchca:0.0.1",
+                "javax.mail:mail:1.4.1",
+
+                /* velocity*/
+                "org.apache.velocity:velocity:1.7",
+                "org.apache.velocity:velocity-tools:2.0",
+
+                "com.google.zxing:core:3.2.0",
+                "org.mybatis.generator:mybatis-generator-maven-plugin:1.3.2",
+
+                "org.apache.httpcomponents:httpclient:4.3.6",
+                "dom4j:dom4j:1.6.1",
+
+                "org.mybatis.generator:mybatis-generator-maven-plugin:1.3.4",
+                "org.apache.ant:ant:1.8.2"
+        )
+        testCompile(
+                "org.springframework:spring-test:$springVersion",
+                "junit:junit:4.11"
+        )
+    }
+
+}
+
+
+
+
+project(":newsmanager") {
+    apply plugin: "war"
+
+}
+//project(":dao") {
+//    apply plugin: 'maven'
+//    uploadArchives {
+//        repositories {
+//            mavenDeployer {
+//                mavenLocal()
+//            }
+//        }
+//    }
+//    install {
+//        repositories.mavenInstaller {
+//            pom.version = "$project.version"
+//            pom.artifactId = "pr_gr_dao"
+//            pom.groupId = "$project.group"
+//        }
+//    }
+//}
+

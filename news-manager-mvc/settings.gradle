@@ -1,0 +1,3 @@
+rootProject.name = 'news-manager-mvc'
+include "dubbo-provider", "dubbo-consume","mybatis-gener","newsmanager"
+
