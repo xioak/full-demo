@@ -1,0 +1,13 @@
+
+*.jar
+
+*.iml
+
+*.class
+
+*.idea/*
+
+*.gradle/*
+
+
+

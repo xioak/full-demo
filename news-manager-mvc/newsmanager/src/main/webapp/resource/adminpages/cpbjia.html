@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title></title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>报价列表</strong></div>
+    <div class="body-content">
+        <div class="padding border-bottom">
+            <button type="button" class="button border-green" id="panel_add_but">
+                <span class="icon-plus-square-o"></span>添加报价
+            </button>
+        </div>
+        <table class="table table-hover text-center">
+            <thead>
+            <tr>
+                <th width="10%">编号</th>
+                <th width="20%">标价标题</th>
+                <th width="15%">创建时间</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="panel admin-panel" style="display: none;">
+    <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>新增报价</strong></div>
+    <div class="body-content">
+        <form method="post" class="form-x" action="" id="data_form">
+
+            <div class="form-group">
+                <div class="label">
+                    <label>报价标题：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="title" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group">
+                <div class="label">
+                    <label>报价资料</label>
+                </div>
+                <div class="field">
+                    <input type="text" id="url1" name="img" class="input tips" style="width:25%; float:left;" value=""
+                           data-toggle="hover" data-place="right" data-image="" title="">
+                    <input type="button" class="button bg-main icon-check-square-o bg-blue bg-main margin-left"
+                           id="image1" value="+ 浏览上传"
+                           style="float:left;">
+                    <input type="file" name="upfile" class="button bg-main icon-check-square-o bg-blue margin-left"
+                           id="imageupload" style="float: left;
+              margin-left: -100px;
+              width: 110px;
+              opacity: 0;">
+                    <div class="tipss"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" type="submit" id="addBut"> 提交</button>
+                </div>
+            </div>
+            <input type="hidden" name="type" value="106">
+            <input type="hidden" name="id" value="0">
+            <input type="hidden" name="imgurl" value="">
+            <input type="hidden" name="cpId" value="0">
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    cpbaojia ={
+
+        init:function () {
+
+            this.panels = $("div.panel");
+
+            var _this = this;
+
+            $("#panel_add_but").click(function () {
+                _this.panels.hide().eq(1).show();
+            });
+
+            $("#addBut").click(function (e) {
+                _this.bj_add(e,$(this));
+            });
+
+
+            this.fileupload();
+
+            this.bj_list();
+        },
+
+        panels :{},
+
+        bj_list:function () {
+            var _this = this ;
+            var html="";
+            $.get("/cpbase/base/qywm/list", {type:"106"}, function (data) {
+                var html="";
+                $.each(data.resultData, function (i, o) {
+                    html +=
+                        '<tr><td>' + o.id + '</td><td>' + o.data.title + '</td><td>'+o.data.creattime+'</td>'+
+                        '<td><div class="button-group">' +
+                        '<a class="button border-red" href="javascript:void(0)">' +
+                        '<span class="icon-trash-o"></span>删除</a></div></td></tr>';
+
+                });
+
+                var tbody = _this.panels.eq(0).find("tbody").empty().append(html);
+                _this.cptd_tab_but(tbody);
+
+            })
+        },
+
+        cptd_tab_but: function (tbody) {
+
+            var panels = this.panels;
+            var _this = this;
+//            tbody.find("a.border-main").click(function () {
+//                _this.admin_detail($(this), panels);
+//            });
+            tbody.find("a.border-red").click(function () {
+                _this.cptd_delete($(this), panels);
+            });
+
+        },
+
+        bj_add:function (e,$this) {
+            e.preventDefault();
+            var form = $this.parents("form");
+            form.removeAttr("enctype");
+            $.post("/cpbase/base/qywm/add", form.serialize(), function (data) {
+                window.location.reload();
+            })
+        },
+
+        cptd_delete:function ($this) {
+            if(!confirm("是否删除该条数据？")){
+                return ;
+            }
+
+            var id = $this.parents("tr").find("td").eq(0).text();
+            $.post("/cpbase/base/cptd/delete", {"type": "104", "id": id}, function (data) {
+                $this.parents("tr").remove();
+            });
+        },
+
+
+        fileupload:function () {
+            $("#imageupload").change(function () {
+                var form = $(this).parents("form");
+                form.attr("enctype", "multipart/form-data");
+                $.ajax({
+                    url: '/ueditor/images/upload',
+                    type: 'POST',
+                    cache: false,
+                    data: new FormData(form[0]),
+                    processData: false,
+                    contentType: false
+                }).done(function (res) {
+                    form.find("input[name='imgurl']").val($.parseJSON(res).url);
+                }).fail(function (res) {
+                    alert(res);
+
+                });
+            });
+        }
+
+    }
+
+
+    $(function () {
+        cpbaojia.init();
+    })
+
+</script>
+
+</body>
+</html>

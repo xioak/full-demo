@@ -1,0 +1,31 @@
+<style type="text/css">
+
+    .u_email {
+
+        margin: 0;
+        padding: 0;
+        height: 500px;
+        text-align: center;
+        font-size: 32px;
+        font-weight: bold;
+        border: 1px solid #19ff38;
+    }
+
+    #contentDiv {
+        padding: 0;
+    }
+
+    h3 {
+        color: #c04039;
+        margin-left: 0;:;
+    }
+
+
+</style>
+
+<h3>JAVA 邮件发送系列</h3>
+<div class="u_email">
+    <p>你好！${user}这是模板生成的邮件。</p>
+    <p>这里提供一个链接<a href="http://192.168.1.100:8080/email">再发送一封</a></p>
+</div>
+

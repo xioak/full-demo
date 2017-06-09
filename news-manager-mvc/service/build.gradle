@@ -1,0 +1,10 @@
+group 'grspring_service'
+archivesBaseName = 'service'
+
+
+
+
+
+jar {
+    manifest.attributes "Implementation-Title": "paoding-rose", "Implementation-Version": version
+}

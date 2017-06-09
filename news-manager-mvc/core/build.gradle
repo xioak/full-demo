@@ -1,0 +1,9 @@
+group 'grspring_core'
+archivesBaseName = 'core'
+
+
+
+
+jar {
+    manifest.attributes "Implementation-Title": "paoding-rose", "Implementation-Version": version
+}

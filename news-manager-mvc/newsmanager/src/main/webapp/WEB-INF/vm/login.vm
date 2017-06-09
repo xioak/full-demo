@@ -1,0 +1,18 @@
+#set($layout =  "/layout/default.vm" )
+
+
+
+
+
+<script>
+
+
+    $(function () {
+        alert(1);
+    })
+
+    $(document).ready(function () {
+
+        alert(2);
+    })
+</script>

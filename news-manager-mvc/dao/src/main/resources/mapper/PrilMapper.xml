@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xioa.dao.PrilMapper">
+    <resultMap id="BaseResultMap" type="com.xioa.model.Pril">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="pril_name" property="prilName" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, pril_name
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from pril
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from pril
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.xioa.model.Pril">
+        insert into pril (id, pril_name)
+        values (#{id,jdbcType=INTEGER}, #{prilName,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.xioa.model.Pril">
+        insert into pril
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="prilName != null">
+                pril_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="prilName != null">
+                #{prilName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xioa.model.Pril">
+        update pril
+        <set>
+            <if test="prilName != null">
+                pril_name = #{prilName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xioa.model.Pril">
+        update pril
+        set pril_name = #{prilName,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <sql id="OraclepPrefix">
+        select * from (select rownum as rowno, t.*
+    </sql>
+    <!--<sql id="OraclepSuffix" >-->
+    <!--and rownum <![CDATA[ <= ]]> 20) table_alias  where table_alias.rowno >= 10-->
+    <!--</sql>-->
+
+    <select id="getByProc" statementType="CALLABLE">
+        {call myproc
+        (#{id,mode=IN,jdbcType=VARCHAR},#{names,mode=OUT,jdbcType=VARCHAR},#{age,mode=OUT,jdbcType=INTEGER},#{sex,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+
+</mapper>

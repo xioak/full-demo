@@ -1,0 +1,15 @@
+#set($layout =  "/layout/default.vm" )
+
+<!--suppress ALL -->
+<script>
+
+    var logined = ${login};
+
+    if(logined){
+        window.location.href="/resource/adminpages/index.html"
+    }else{
+        window.location.href="/resource/adminpages/login.html"
+    }
+
+
+</script>

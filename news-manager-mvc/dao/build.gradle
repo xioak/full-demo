@@ -1,0 +1,30 @@
+group 'grspring_dao'
+archivesBaseName = 'dao'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            mavenLocal()
+        }
+    }
+}
+
+dependencies {
+    compile project(":core")
+    compile files('lib/oracle_11g_ojdbc6.jar')
+}
+
+install {
+    repositories.mavenInstaller {
+        pom.version = "$project.version"
+        pom.artifactId = "pr_gr_dao"
+        pom.groupId = "$project.group"
+    }
+}
+
+jar {
+    manifest.attributes "Implementation-Title": "paoding-rose", "Implementation-Version": version
+}
+
+
+

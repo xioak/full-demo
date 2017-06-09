@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title></title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+    <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>留言列表</strong></div>
+    <div class="body-content">
+        <table class="table table-hover text-center">
+            <thead>
+            <tr>
+                <th width="10%">编号</th>
+                <th width="20%">留言用户</th>
+                <th width="15%">留言时间</th>
+                <th width="15%">是否已回复</th>
+                <th width="15%">操作</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+</div>
+
+<div class="panel admin-panel" style="display: none">
+    <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>留言详情</strong></div>
+    <div class="body-content">
+        <div class="padding border-bottom" style="margin: -20px 40px 0 0;border-bottom: 0px;">
+            <button type="button" class="button border-green" id="back_panel_but">
+                <span class="icon-plus-square-o"></span>返回
+            </button>
+        </div>
+        <form method="post" class="form-x" action="">
+            <div class="form-group">
+                <div class="label">
+                    <label>意见或建议内容：</label>
+                </div>
+                <div class="field">
+                    <textarea type="text" class="input" value="" name="message" style="height: 220px"></textarea>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>客户姓名：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" value="" name="user"/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>客户行业：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" value="" name="industry"/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>客户电话：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" value="" name="phone"/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>客户邮箱：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" value="" name="email"/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <input type="hidden" name="answerType" value="0"/>
+                    <input type="hidden" name="id" value="0"/>
+                    <button class="button bg-main icon-check-square-o" type="submit" id="deleteBut">删除</button>
+                    <button class="button bg-main icon-check-square-o" type="submit" id="addBut">提交</button>
+                    <button class="button bg-main icon-check-square-o" type="submit" id="answerBut">标记为已回复</button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    var message_App = {
+        init: function () {
+
+            this.message_list();
+
+            var _this = this;
+
+            $("#addBut").click(function () {
+                _this.message_add($(this));
+            });
+
+            $("#answerBut").click(function () {
+                _this.message_answered($(this));
+            });
+
+            $("#deleteBut").click(function () {
+                _this.message_delete($(this));
+            });
+
+            $("#back_panel_but").click(function () {
+                $("div.panel").hide().eq(0).show();
+            });
+
+
+        },
+
+        param: {"page": "1", "pagesize": "5"},
+
+        current:{},
+
+        message_list: function () {
+            var _this = this;
+            $.get("/message/list", this.param, function (data) {
+
+                var html = "";
+                $.each(data.resultData.datas, function (i, o) {
+
+                    var answer = "已回复";
+                    if (o.answerType == 0) {
+                        answer = "未回复"
+                    }
+
+                    html +=
+                        '<tr><td>' + o.id + '</td><td>' + o.user + '</td><td>' + o.addTime + '</td>' +
+                        '<td>' + answer + '</td>' +
+                        '<td><div class="button-group"><a class="button border-main" href="javascript:void(0)">' +
+                        '<span class="icon-edit"></span>查看</a> ' +
+//                        '<a class="button border-red" href="javascript:void(0)">' +
+//                        '<span class="icon-trash-o"></span>删除</a>' +
+                        '</div></td></tr>';
+
+                });
+
+
+                var panel = $("div.panel").eq(0);
+                var tbody = panel.find("table").find("tbody").empty().append(html);
+                _this.message_tab_but(tbody);
+                _this.message_pager(tbody, data.resultData.page);
+
+            })
+        },
+
+        message_tab_but: function (tbody) {
+            var _this = this;
+            tbody.find("a.border-main").click(function () {
+                _this.message_detail($(this));
+            });
+
+        },
+
+        message_pager: function (tbody, data) {
+            var pagehtml = '<tr id="pagerrow"><td colspan="8"><div class="pagelist">';
+            var pagedata = data;
+            var _this = this;
+            if (pagedata.first) {
+                pagehtml += '<a nopage="0">上一页</a>'
+            } else {
+                pagehtml += '<a>上一页</a>'
+            }
+
+            $.each(pagedata.pagelist, function (i, o) {
+                if (o === pagedata.curre) {
+                    pagehtml += '<span class="current">' + o + '</span>'
+                } else {
+                    pagehtml += '<a>' + o + '</a>';
+                }
+            })
+
+            if (pagedata.last) {
+                pagehtml += '<a nopage="0">下一页</a></div></td><tr>'
+            } else {
+                pagehtml += '<a>下一页</a></div></td><tr>'
+            }
+
+            tbody.append($(pagehtml));
+
+            // 翻页
+            var pagerdiv = $("#pagerrow");
+            pagerdiv.find("a").click(function () {
+
+                if ($(this).attr("nopage") == 0) {
+                    return;
+                }
+
+                var pageno = $(this).text();
+
+                if (pageno == "上一页") {
+                    pageno = pagerdiv.find("span").text() * 1 - 1;
+                }
+                if (pageno == "下一页") {
+                    pageno = pagerdiv.find("span").text() * 1 + 1;
+                }
+                _this.param.page = pageno;
+                _this.param.userPager = true;
+                _this.message_list();
+            });
+        },
+
+
+        message_detail: function ($this) {
+            var id = $this.parents("tr").find("td").eq(0).text();
+
+            this.current.tr = $this.parents("tr");
+            var param = {"id": id};
+            $.post("/message/get", param, function (data) {
+                var panel = $("div.panel").hide().eq(1);
+                var form = panel.find("form");
+
+                var data = data.resultData;
+
+                form.find("input[name='id']").val(data.id);
+                form.find("textarea").val(data.message);
+                form.find("input[name='industry']").val(data.industry);
+                form.find("input[name='phone']").val(data.phone);
+                form.find("input[name='email']").val(data.email);
+                form.find("input[name='id']").val(data.id);
+                form.find("input[name='user']").val(data.user);
+                panel.show();
+
+            })
+        },
+
+        message_delete: function ($this) {
+
+            var id = $this.parents("form").find("input[name='id']").val();
+            this.param.id = id;
+            var _this = this;
+            $.post("/message/delete", this.param, function (data) {
+//                $this.parents("tr").remove();
+                _this.current.tr.remove();
+                $("div.panel").eq(1).hide();
+            })
+        },
+
+        message_answered: function ($this) {
+
+            var param = {};
+            var id = $this.parents("form").find("input[name='id']").val();
+            param.id = id;
+            param.answerType = 1;
+            var _this = this;
+            $.post("/message/add", param, function (data) {
+                _this.message_list();
+            })
+        },
+
+        message_add: function ($this) {
+            var form = $this.parents("form");
+            $.post("/message/add", form.serialize(), function (data) {
+                _this.message_list();
+            })
+
+        }
+    }
+
+
+    $(function () {
+        message_App.init();
+    })
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xioa.dao.ProcedureMapper">
+
+    <select id="getByProc" statementType="CALLABLE" resultOrdered="true" resultSets="set" resultType="list">
+        {call myproc (#{name,mode=IN,jdbcType=VARCHAR}, #{id,mode=IN,jdbcType=INTEGER},
+        #{age2,mode=OUT,jdbcType=VARCHAR},#{uname,mode=OUT,jdbcType=VARCHAR}, #{sex,mode=OUT,jdbcType=VARCHAR})}
+    </select>
+</mapper>

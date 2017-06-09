@@ -1,0 +1,23 @@
+group 'grspring_web'
+version '1.0-SNAPSHOT'
+
+apply plugin: "war"
+
+archivesBaseName = 'web'
+
+dependencies {
+    compile project(":core")
+    compile project(":dao")
+//    compile project(":mybatis-gener")
+    compile(
+            "org.apache.taglibs:taglibs-standard-impl:1.2.1"
+    )
+    providedCompile(
+            "javax.servlet:javax.servlet-api:3.1.0",
+            "javax.servlet.jsp:jsp-api:2.2.1-b03",
+            "javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1"
+    )
+}
+
+
+
