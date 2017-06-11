@@ -4,6 +4,7 @@ var home_api_data = {
 
         this.guanyuhonghe();
         this.xinwenzhongxi();
+        this.xiangmufangan();
 
     },
 
@@ -33,7 +34,22 @@ var home_api_data = {
         baojia: {
             url: "/cpbase/base/qywm/list",
             param: {page: 1, type: 106, pageSize: 10}
+        },
+        cpliebiao: {
+            url: "/content/list",
+            param: {page: 1, type: 4, pageSize: 100}
+        },
+
+        cpInfo: {
+            url: "/content/get",
+            param: {page: 1, pageSize: 100}
+        },
+
+        cptd: {
+            url: "/cpbase/base/cptd/list",
+            param: {page: 1, type: 104, pageSize: 100}
         }
+
     },
 
 
@@ -133,6 +149,97 @@ var home_api_data = {
                 // _this.pagers(data, baojia, _this.xinwenzhongxi);xinwenzhongxi
             })
         }
+
+    },
+
+    xiangmufangan: function () {
+        var contt = $("#cptd_js");
+        var p = this.getparam;
+        var licc;
+        if (contt && contt.length > 0) {
+            // contt.find("p").empty();
+            var html = "";
+            $.get(p.host + p.cpliebiao.url, p.cpliebiao.param, function (data) {
+
+                $.each(data.resultData.newsList, function (i, o) {
+                    html += '<li pid="' + o.id + '">' + o.title + '</li>'
+
+                    if (contt.find("li").eq(0).hasClass("active") && i == 0) {
+
+                        $("#chanpin").empty().html(o.content);
+                    }
+
+                })
+
+                licc = contt.find("ul").empty().append(html);
+
+                contt.find("ul").find("li").click(function () {
+                    // alert($(this).attr("pid"));
+                    var id = $(this).attr("pid");
+
+                    getcppdata(id);
+
+                });
+
+                contt.find("li").click(function () {
+
+                    var id = contt.find("ul").find("li").eq(0).attr("pid");
+                    getcppdata(id);
+
+                })
+
+                function getcppdata(id) {
+                    if (contt.find("li").eq(0).hasClass("active")) {
+                        p.cpInfo.param.id = id;
+                        $.get(p.host + p.cpInfo.url, p.cpInfo.param, function (data) {
+                            if (data.resultData.content) {
+                                $("#chanpin").empty().html(data.resultData.content);
+                            }
+                        });
+                    } else {
+                        p.cptd.param.cpId = id;
+                        $.get(p.host + p.cptd.url, p.cptd.param, function (data) {
+
+                            var data = data.resultData;
+                            // var html =
+                            //     " <a href='#'>" +
+                            //     " <img class='rotate-img' src='images/gear.png' alt='gear'>" +
+                            //     " <img class='icon-part' src='" + data.content.imgurl + "' alt='icon'>" +
+                            //     " </a>" +
+                            //     " <h4>" + data.content.title + "</h4>";
+
+                            var html="";
+
+
+                            $.each(data, function (i, o) {
+                                html += '<div class="col-md-3 col-sm-6 col-xs-12 pc-hidden">' +
+                                    '<a href="#">' +
+                                    ' <img class="rotate-img" src="img/gear.png" alt="gear">' +
+                                    ' <img class="icon-part" src="' + o.data.imgurl + '" alt="icon">' +
+                                    '   </a>' +
+                                    '   <h4 style="margin-bottom: 0;">' + o.data.title + '</h4>';
+
+
+                                $.each(o.data.subtitle, function (i, o) {
+                                    html += " <p>" + o + "</p>";
+                                });
+
+                                html += '</div>'
+
+
+                            });
+
+                            $("#tedian > div").empty().html(html);
+
+
+                        });
+                    }
+                }
+
+            })
+
+        }
+
 
     },
 
