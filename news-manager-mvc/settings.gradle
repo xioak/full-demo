@@ -1,3 +1,4 @@
 rootProject.name = 'news-manager-mvc'
-include "mybatis-gener","newsmanager"
+include "newsmanager"
+//"mybatis-gener",
 
