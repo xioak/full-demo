@@ -60,6 +60,10 @@ public class MyCommentGenerator implements CommentGenerator {
     }
 
     /**
+     * sas
+     */
+
+    /**
      * This method adds the custom javadoc tag for. You may do nothing if you do
      * not wish to include the Javadoc tag - however, if you do not include the
      * Javadoc tag then the Java merge capability of the eclipse plugin will
@@ -118,10 +122,8 @@ public class MyCommentGenerator implements CommentGenerator {
         }
 
         StringBuilder sb = new StringBuilder();
-
         innerEnum.addJavaDocLine("/**");
-        //      addJavadocTag(innerEnum, false);
-        sb.append(" * ");
+        sb.append(" **");
         sb.append(introspectedTable.getFullyQualifiedTable());
         innerEnum.addJavaDocLine(sb.toString());
         innerEnum.addJavaDocLine(" */");
@@ -133,18 +135,12 @@ public class MyCommentGenerator implements CommentGenerator {
             return;
         }
 
+
         StringBuilder sb = new StringBuilder();
-        sb.append(" //");
-        sb.append(introspectedColumn.getRemarks());
-        field.addJavaDocLine(sb.toString());
-//        field.addJavaDocLine("/**");
-//        sb.append(" * ");
-//        sb.append(introspectedColumn.getRemarks());
-//        field.addJavaDocLine(sb.toString());
-//
-//        //      addJavadocTag(field, false);
-//
-//        field.addJavaDocLine(" */");
+        field.addJavaDocLine("/**");
+        field.addJavaDocLine(" * "+introspectedColumn.getActualColumnName());
+        field.addJavaDocLine(" * "+introspectedColumn.getRemarks());
+        field.addJavaDocLine(" */");
     }
 
     public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
@@ -186,11 +182,11 @@ public class MyCommentGenerator implements CommentGenerator {
 //        sb.append(" * ");
 //        sb.append(introspectedColumn.getRemarks());
 //        method.addJavaDocLine(sb.toString());
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(" //");
-        sb.append(introspectedColumn.getRemarks());
-        method.addJavaDocLine(sb.toString());
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(" /** ");
+//        sb.append(introspectedColumn.getRemarks());
+//        sb.append(" */");
+//        method.addJavaDocLine(sb.toString());
 
 //        sb.setLength(0);
 //        sb.append(" * @return ");
@@ -210,10 +206,10 @@ public class MyCommentGenerator implements CommentGenerator {
             return;
         }
 
-        StringBuilder sb = new StringBuilder();
-        sb.append(" //");
-        sb.append(introspectedColumn.getRemarks());
-        method.addJavaDocLine(sb.toString());
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(" //");
+//        sb.append(introspectedColumn.getRemarks());
+//        method.addJavaDocLine(sb.toString());
 //
 //        method.addJavaDocLine("/**");
 //        StringBuilder sb = new StringBuilder();
@@ -252,7 +248,7 @@ public class MyCommentGenerator implements CommentGenerator {
         sb.append(" ");
         sb.append(currentDateStr);
 
-        //      addJavadocTag(innerClass, markAsDoNotDelete);
+//        addJavadocTag(innerClass, markAsDoNotDelete);
 
         innerClass.addJavaDocLine(" */");
     }
