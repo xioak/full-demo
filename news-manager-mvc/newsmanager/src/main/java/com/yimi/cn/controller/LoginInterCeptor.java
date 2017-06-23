@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterCeptor extends HandlerInterceptorAdapter {
 
 
-    private static final String[] IGNORE_URI = {"/", "/home","/login/index","css","js","login.html"};
+    private static final String[] IGNORE_URI = {"/", "/admin","/login/index","css","js","login.html"};
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

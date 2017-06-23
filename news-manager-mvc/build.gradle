@@ -4,8 +4,8 @@ subprojects {
     apply plugin: "idea"
     group = "org.xioa"
     version = "1.0"
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
 
     ext {
         slf4jVersion = "1.7.7"

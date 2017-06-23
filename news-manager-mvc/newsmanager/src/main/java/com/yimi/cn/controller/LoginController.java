@@ -29,7 +29,7 @@ public class LoginController {
     IAdminService adminServiceImpl;
 
 
-    @RequestMapping("/")
+    @RequestMapping("/admin")
     public ModelAndView gotoLoginIndex(String home, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView();
@@ -48,7 +48,7 @@ public class LoginController {
         return view;
     }
 
-    @RequestMapping("/home")
+    @RequestMapping("/")
     public ModelAndView gotoHomendex(String home, HttpServletRequest request) {
 
         ModelAndView view = new ModelAndView();
