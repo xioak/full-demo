@@ -9,8 +9,8 @@
 
 *.gradle/*
 
-*/build
-*
+*/build/*
+
 
 
 

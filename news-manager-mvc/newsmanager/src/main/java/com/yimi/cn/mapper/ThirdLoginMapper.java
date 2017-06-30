@@ -1,22 +1,19 @@
 package com.yimi.cn.mapper;
 
-
 import com.yimi.cn.model.ThirdLogin;
-
-import java.util.List;
+import com.yimi.cn.model.ThirdLoginKey;
 
 public interface ThirdLoginMapper {
-    int deleteByPrimaryKey(Integer id);
+
+    int deleteByPrimaryKey(ThirdLoginKey key);
 
     int insert(ThirdLogin record);
 
     int insertSelective(ThirdLogin record);
 
-    ThirdLogin selectByPrimaryKey(Integer id);
+    ThirdLogin selectByPrimaryKey(ThirdLoginKey key);
 
     int updateByPrimaryKeySelective(ThirdLogin record);
 
     int updateByPrimaryKey(ThirdLogin record);
-
-    List<ThirdLogin> findThirdLoginAll();
 }

@@ -1,0 +1,8 @@
+#set($layout =  "/layout/default.vm" )
+
+<!--suppress ALL -->
+<script>
+
+    window.location.href = "/resource/homepages/index.html";
+
+</script>

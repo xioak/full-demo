@@ -3,28 +3,31 @@
 <mapper namespace="com.yimi.cn.mapper.ThirdLoginMapper">
   <resultMap id="BaseResultMap" type="com.yimi.cn.model.ThirdLogin">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="type_name" jdbcType="VARCHAR" property="typeName" />
+    <id column="type" jdbcType="INTEGER" property="type" />
     <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="login_date" jdbcType="TIMESTAMP" property="loginDate" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, type, type_name, token
+    id, type, token, icon, login_date
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="com.yimi.cn.model.ThirdLoginKey" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from third_login
     where id = #{id,jdbcType=INTEGER}
+      and type = #{type,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <delete id="deleteByPrimaryKey" parameterType="com.yimi.cn.model.ThirdLoginKey">
     delete from third_login
     where id = #{id,jdbcType=INTEGER}
+      and type = #{type,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.yimi.cn.model.ThirdLogin">
-    insert into third_login (id, type, type_name, 
-      token)
-    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{typeName,jdbcType=VARCHAR}, 
-      #{token,jdbcType=VARCHAR})
+    insert into third_login (id, type, token, 
+      icon, login_date)
+    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{token,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{loginDate,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.yimi.cn.model.ThirdLogin">
     insert into third_login
@@ -35,11 +38,14 @@
       <if test="type != null">
         type,
       </if>
-      <if test="typeName != null">
-        type_name,
-      </if>
       <if test="token != null">
         token,
+      </if>
+      <if test="icon != null">
+        icon,
+      </if>
+      <if test="loginDate != null">
+        login_date,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -49,40 +55,39 @@
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
-      <if test="typeName != null">
-        #{typeName,jdbcType=VARCHAR},
-      </if>
       <if test="token != null">
         #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="loginDate != null">
+        #{loginDate,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.yimi.cn.model.ThirdLogin">
     update third_login
     <set>
-      <if test="type != null">
-        type = #{type,jdbcType=INTEGER},
-      </if>
-      <if test="typeName != null">
-        type_name = #{typeName,jdbcType=VARCHAR},
-      </if>
       <if test="token != null">
         token = #{token,jdbcType=VARCHAR},
       </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="loginDate != null">
+        login_date = #{loginDate,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
+      and type = #{type,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.yimi.cn.model.ThirdLogin">
     update third_login
-    set type = #{type,jdbcType=INTEGER},
-      type_name = #{typeName,jdbcType=VARCHAR},
-      token = #{token,jdbcType=VARCHAR}
+    set token = #{token,jdbcType=VARCHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      login_date = #{loginDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
+      and type = #{type,jdbcType=INTEGER}
   </update>
-
-  <select id="findThirdLoginAll" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from third_login
-  </select>
 </mapper>
