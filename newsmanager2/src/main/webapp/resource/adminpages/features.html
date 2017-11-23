@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="renderer" content="webkit">
+  <title>公司及团队</title>
+  <link rel="stylesheet" href="css/pintuer.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link href="/resource/umeditor1.2.3/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+  <script src="js/jquery.js"></script>
+  <script src="js/pintuer.js"></script>
+
+  <style>
+
+    .main-con div {
+      text-align: center;
+      padding: 10px 10px;
+    }
+
+    .col-md-3 {
+      width: 25%;
+      float: left;
+    }
+
+    .main-con div a {
+      display: inline-block;
+      width: 78px;
+      height: 78px;
+      padding: 10px;
+      border: 1px solid transparent;
+      border: none \9;
+      border-radius: 40px;
+      -webkit-transition: all .7s linear;
+      transition: all .7s linear;
+    }
+
+    .rotate-img {
+      -webkit-animation-name: rotate;
+      animation-name: rotate;
+      -webkit-animation-timing-function: linear;
+      animation-timing-function: linear;
+      -webkit-animation-duration: 8000ms;
+      animation-duration: 8000ms;
+      -webkit-animation-iteration-count: infinite;
+      animation-iteration-count: infinite;
+      vertical-align: middle;
+      border: 0;
+    }
+
+    .icon-part {
+      position: relative;
+      top: -47px;
+    }
+
+    .main-con div h4 {
+      font-weight: bold;
+      color: #666;
+      -webkit-transition: all .3s linear;
+      transition: all .3s linear;
+    }
+
+    .main-con div p {
+      padding: 0;
+      color: #666;
+      font-size: 1.1em;
+      margin-bottom: 5px;
+    }
+
+    .main-con div {
+      text-align: center;
+      padding: 10px 10px;
+  </style>
+
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>预览</strong></div>
+  <div class="body-content">
+
+    <div class="main-con" id="icon_contner">
+
+    </div>
+
+  </div>
+</div>
+
+<div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>产品特点</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" action="" id="data_form">
+
+
+      <div class="form-group">
+        <div class="label">
+          <label>产品名称：</label>
+        </div>
+        <div class="field">
+          <select name="cpId" class="input w50">
+            <option value="0">请选择产品名称</option>
+          </select>
+          <div class="tips" title=""></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="label">
+          <label>标题一：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" name="title" value="" />
+          <div class="tips"></div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="label">
+          <label>标题二：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" name="subtitle" value="" />
+          <div class="tips">换行用，隔开</div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="label">
+          <label>ICON：</label>
+        </div>
+        <div class="field">
+          <input type="text" id="url1" name="img" class="input tips" style="width:25%; float:left;" value="" data-toggle="hover" data-place="right" data-image="" title="">
+          <input type="button" class="button bg-main icon-check-square-o bg-blue bg-main margin-left" id="image1" value="+ 浏览上传" style="float:left;">
+          <input type="file" name="upfile" class="button bg-main icon-check-square-o bg-blue margin-left" id="imageupload"   style="float: left;
+              margin-left: -100px;
+              width: 110px;
+              opacity: 0;">
+          <div class="tipss">图片尺寸：32*32</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit" id="qywhBut"> 提交</button>
+        </div>
+      </div>
+      <input type="hidden" name="type" id="baseType" value="104">
+      <input type="hidden" name="id"  value="0">
+      <input type="hidden" name="imgurl"  value="">
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript" src="/resource/umeditor1.2.3/third-party/jquery.min.js"></script>
+
+<script>
+
+    $(function () {
+
+        //产品名称列表
+
+        $.get("/content/name/only",{"type":"4"},function (data) {
+            var select =$("#data_form").find("select[name='cpId']");
+            var html="";
+            if(data.resultData){
+                $.each(data.resultData,function (i,o) {
+                    html+='<option value="'+o.id+'">'+o.title+'</option>'
+                })
+
+                select.append($(html));
+            };
+
+
+
+            select.change(function () {
+
+                var id =$(this).val();
+
+                if(id==0){
+                    return;
+                }
+
+                $.get("/cpbase/base/cptd/list",{"type":"104","cpId":id},function (data) {
+                    var tdata = data.resultData;
+
+                    if(tdata.length==0){
+                        return;
+                    }
+                    $.each(data.resultData,function (i,o) {
+                        var html="  <div class='col-md-3 col-sm-6 col-xs-12 '>"+
+                            " <a href='#'>"+
+                            "  <img class='rotate-img' src='images/gear.png' alt='gear'>";
+                        html+= "  <img class='icon-part' src='"+o.data.imgurl+"' alt='icon'>"+
+                            " </a>"+
+                            " <h4>"+o.data.title+"</h4>" +
+                            "<input type='hidden' value='"+o.id+"'></input>"
+
+                        $.each(o.data.subtitle,function (i,o) {
+                            html+=" <p>"+o+"</p>";
+                        });
+                        $("#icon_contner").append($(html));
+
+                        // 删除 修改
+
+
+                    });
+                })
+            });
+
+
+        });
+
+
+
+
+
+        $("#qywhBut").click(function () {
+
+            var form = $(this).parents("form");
+
+            form.removeAttr("enctype");
+
+            $.post("/cpbase/base/qywm/add",form.serialize(),function (data) {
+
+            })
+
+        });
+
+        $("#imageupload").change(function () {
+            var form = $(this).parents("form");
+            form.attr("enctype","multipart/form-data");
+            $.ajax({
+                url: '/ueditor/images/upload',
+                type: 'POST',
+                cache: false,
+                data: new FormData(form[0]),
+                processData: false,
+                contentType: false
+            }).done(function(res) {
+                form.find("input[name='imgurl']").val($.parseJSON(res).url);
+            }).fail(function(res) {
+                alert(res);
+
+            });
+        })
+
+
+    })
+
+</script>
+</body>
+</html>

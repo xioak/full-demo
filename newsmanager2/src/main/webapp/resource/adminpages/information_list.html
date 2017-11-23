@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="renderer" content="webkit">
+  <title></title>
+  <link rel="stylesheet" href="css/pintuer.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link href="/resource/umeditor1.2.3/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+  <script src="js/jquery.js"></script>
+  <script src="js/pintuer.js"></script>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head" id="add"><strong><span class="icon-pencil-square-o"></span>资讯管理</strong></div>
+  <div class="body-content">
+    <table class="table table-hover text-center">
+      <tr>
+        <th width="10%">编号</th>
+        <th width="20%">标题</th>
+        <th width="15%">创建时间</th>
+        <th width="15%">操作</th>
+      </tr>
+      <tbody id="new_tb_pager">
+      <tr >
+        <td colspan="8"><div class="pagelist"> <a>上一页</a> <span class="current">1</span><a>2</a><a href="">3</a><a href="">下一页</a><a href="">尾页</a> </div></td>
+      </tr>
+      </tbody></table>
+    <form method="post" class="form-x" action="" style="display: none">
+      <div class="form-group">
+        <div class="label">
+          <label>资讯标题：</label>
+        </div>
+        <div class="field">
+          <input type="text" class="input" value="" id="newsTitle" name="title" />
+          <input type="hidden" class="input" value="" id="newsId" name="title" />
+          <div class="tips"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label>资讯详情：</label>
+        </div>
+        <div class="field">
+          <script type="text/plain" id="myEditor" style="width:1000px;height:240px;">
+
+          </script></div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit" id="newsUpBut">修改</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+</div>
+
+<script type="text/javascript" src="/resource/umeditor1.2.3/third-party/jquery.min.js"></script>
+<script type="text/javascript" src="/resource/umeditor1.2.3/third-party/template.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/resource/umeditor1.2.3/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/resource/umeditor1.2.3/umeditor.min.js"></script>
+<script type="text/javascript" src="/resource/umeditor1.2.3/lang/zh-cn/zh-cn.js"></script>
+<script>
+    var um = UM.getEditor('myEditor');
+    $(function () {
+
+        var newsManage = {
+
+            param:{
+                page:1,type:3,pageSize:5
+            },
+
+            getNewsList:function () {
+
+                var _this =this;
+                $.get("/content/list",this.param,function (data) {
+                    var html="";
+                    $.each(data.resultData.newsList,function (i,o) {
+                        html+=
+                            '<tr><td>'+o.id+'</td><td>'+o.title+'</td><td>'+o.creatTime+'</td>'
+                            +'<td><div class="button-group"> ' +
+                            '<a class="button border-main" href="javascript:void(0)">' +
+                            '<span class="icon-edit"></span>预览</a> ' +
+                            '<a class="button border-red" href="javascript:void(0)">' +
+                            '<span class="icon-trash-o"></span>删除</a></div></td></tr>'
+                    });
+
+                    var pgg = $("#new_tb_pager");
+                    pgg.empty().append($(html));
+
+                    //操作按钮
+                    _this.operaBut(pgg,data);
+
+                    //分页按钮
+                    _this.userPager(data);
+                })
+
+                //修改新闻资讯
+                $("#newsUpBut").click(function () {
+
+                    _this.param.content = um.getContent();
+                    _this.param.id =$("#newsId").val();
+                    _this.param.title =$("#newsTitle").val();
+
+                    if(_this.param.content.trim()==""){
+                        alert("发布内容不能为空");
+                        return ;
+                    }
+                    if(_this.param.title ==""){
+                        alert("标题不能为空");
+                        return;
+                    }
+
+                    $.post("/content/update",_this.param,function (data) {
+
+                        window.location.href = "information_list.html";
+
+                    },"json");
+
+                })
+
+            },
+
+            operaBut:function (pgg,data) {
+                pgg.parents("table").find("a.border-main").click(function () {
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+
+                    $.get("/content/get",{"id":id},function (data) {
+
+                        if(data.resultData.content){
+                            um.setContent(data.resultData.content);
+                        }
+
+                        $("#newsTitle").val(data.resultData.title);
+                        $("#newsId").val(data.resultData.id);
+                        $("#newsTitle").parents("form").show();
+
+                    })
+
+                });
+
+                pgg.parents("table").find("a.border-red").click(function () {
+
+                    if(!confirm("确定要删除该内容吗？")){
+                        return ;
+                    }
+
+                    var id = $(this).parents("tr").find("td").eq(0).text();
+
+                    $.get("/content/delete",{"id":id},function (data) {
+                        window.location.reload();
+                    })
+
+                });
+            },
+
+            userPager:function (data) {
+                var pgg = $("#new_tb_pager");
+
+                $("#newsTitle").parents("form").hide();
+
+                var pagehtml ='<tr id="pagerrow"><td colspan="8"><div class="pagelist">';
+
+                var pagedata = data.resultData.page;
+
+                if(pagedata.first){
+                    pagehtml+= '<a nopage="0">上一页</a>'
+                }else{
+                    pagehtml+= '<a>上一页</a>'
+                }
+
+                $.each(pagedata.pagelist,function (i,o) {
+
+                    if(o === pagedata.curre){
+                        pagehtml+= '<span class="current">'+o+'</span>'
+                    }else{
+                        pagehtml+='<a>'+o+'</a>';
+                    }
+                })
+
+                if(pagedata.last){
+                    pagehtml+= '<a nopage="0">下一页</a></div></td><tr>'
+                }else{
+                    pagehtml+= '<a>下一页</a></div></td><tr>'
+                }
+
+                pgg.append($(pagehtml));
+
+                // 翻页
+                $("#pagerrow").find("a").click(function () {
+
+                    if($(this).attr("nopage")==0){
+                        return ;
+                    }
+
+                    var pageno = $(this).text();
+
+                    if(pageno=="上一页"){
+                        pageno =   $("#new_tb_pager").find("span").text()*1-1;
+                    }
+                    if(pageno=="下一页"){
+                        pageno =   $("#new_tb_pager").find("span").text()*1+1;
+                    }
+                    newsManage.param.page = pageno;
+                    newsManage.param.userPager = true;
+                    newsManage.getNewsList();
+
+                });
+            }
+
+        };
+
+        newsManage.getNewsList();
+
+    })
+
+</script>
+
+</body>
+</html>

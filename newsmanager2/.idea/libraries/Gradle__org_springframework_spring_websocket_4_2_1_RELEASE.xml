@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.springframework:spring-websocket:4.2.1.RELEASE">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../java/gradle_jars/caches/modules-2/files-2.1/org.springframework/spring-websocket/4.2.1.RELEASE/f9ab615c08b08b9295c0b85eed02b1d354f65ab6/spring-websocket-4.2.1.RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../java/gradle_jars/caches/modules-2/files-2.1/org.springframework/spring-websocket/4.2.1.RELEASE/210c733b1839c68611a5b279b686a9804e04a430/spring-websocket-4.2.1.RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

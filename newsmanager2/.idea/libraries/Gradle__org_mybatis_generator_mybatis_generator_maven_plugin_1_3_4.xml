@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: org.mybatis.generator:mybatis-generator-maven-plugin:1.3.4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../java/gradle_jars/caches/modules-2/files-2.1/org.mybatis.generator/mybatis-generator-maven-plugin/1.3.4/cbd8f12631bb5b373e2c5e11ef76c9366a28e526/mybatis-generator-maven-plugin-1.3.4.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../java/gradle_jars/caches/modules-2/files-2.1/org.mybatis.generator/mybatis-generator-maven-plugin/1.3.4/bb8464093935444a561025f3538765f4c34dfe78/mybatis-generator-maven-plugin-1.3.4-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

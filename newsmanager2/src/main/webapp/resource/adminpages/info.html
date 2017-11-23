@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>公司及团队</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+  <link href="/resource/umeditor1.2.3/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+  <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+
+  <style>
+    .edui-container *{
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+    }
+
+    .edui-container *:before,
+    .edui-container *:after {
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+    }
+  </style>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>公司及团队</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" action="">
+
+      <div class="form-group">
+        <div class="label">
+          <label>介绍详情：</label>
+        </div>
+        <div class="field">
+          <script type="text/plain" id="myEditor" style="width:1000px;height:240px;">
+
+          </script></div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit" id="teamBut"> 提交</button>
+        </div>
+      </div>
+                  <input type="hidden" id="cnid" value="0">
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript" src="/resource/umeditor1.2.3/third-party/jquery.min.js"></script>
+<script type="text/javascript" src="/resource/umeditor1.2.3/third-party/template.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="/resource/umeditor1.2.3/umeditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/resource/umeditor1.2.3/umeditor.min.js"></script>
+<script type="text/javascript" src="/resource/umeditor1.2.3/lang/zh-cn/zh-cn.js"></script>
+<script>
+    var um = UM.getEditor('myEditor');
+
+    um.addListener( 'ready', function( editor ) {
+
+
+
+    } );
+
+
+    $(function () {
+        $.post("/cpbase/base/team/get",{"type":"1"},function (data) {
+
+            if(!data.resultData.content){
+                return;
+            }
+            um.setContent(data.resultData.content);
+            $("#cnid").val(data.resultData.id);
+        });
+
+
+        $("#teamBut").click(function () {
+
+            if( $(this).data("sub")){
+                return;
+            }
+            var content = um.getContent();
+            var id =$("#cnid").val();
+            $(this).data("sub",true);
+            $.post("/cpbase/base/team",{"content":content,"id":id},function (data) {
+                $(this).data("sub",false);
+            })
+        });
+    })
+
+
+
+</script>
+</body></html>

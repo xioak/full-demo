@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="renderer" content="webkit">
+    <title>公司及团队</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+  <link href="/resource/umeditor1.2.3/themes/default/css/umeditor.css" type="text/css" rel="stylesheet">
+  <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+
+  <style>
+
+
+    .edui-container *{
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+    }
+
+    .edui-container *:before,
+    .edui-container *:after {
+      -webkit-box-sizing: content-box;
+      -moz-box-sizing: content-box;
+      box-sizing: content-box;
+    }
+  </style>
+</head>
+<body>
+<div class="panel admin-panel">
+  <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>公司简介</strong></div>
+  <div class="body-content">
+    <form method="post" class="form-x" action="">
+
+      <div class="form-group">
+        <div class="label">
+          <label>简介内容：</label>
+        </div>
+        <div class="field">
+          <script type="text/plain" id="myEditor" style="width:1000px;height:240px;">
+          </script></div>
+
+      </div>
+        <textarea name="content" class="input" style="height:220px; border:1px solid #ddd;display: none"></textarea>
+      <div class="tips" title=""></div>
+
+      <div class="form-group">
+        <div class="label">
+          <label>右部图片：</label>
+        </div>
+        <div class="field">
+          <div>
+          <img src="" style="display: none;width: 80%;margin-bottom: 20px;">
+
+          </div>
+          <input type="text"  name="img" class="input tips" style="width:25%; float:left;" value="" data-image="" title="">
+          <input type="button" class="button bg-main icon-check-square-o bg-blue bg-main margin-left" value="+ 浏览上传" style="float:left;">
+          <input type="file" name="upfile" class="button bg-main icon-check-square-o bg-blue margin-left" id="imageupload"   style="float: left;
+              margin-left: -100px;
+              width: 110px;
+              opacity: 0;">
+          <div class="tipss">图片尺寸：1920*500</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="label">
+          <label></label>
+        </div>
+        <div class="field">
+          <button class="button bg-main icon-check-square-o" type="submit" id="baseCpBut"> 提交</button>
+        </div>
+      </div>
+
+      <input type="hidden" name="type" id="baseType" value="101">
+      <input type="hidden" name="id"  value="0">
+      <input type="hidden" name="imgurl"  value="">
+      <input type="hidden" value="">
+    </form>
+  </div>
+</div>
+
+          <script type="text/javascript" src="/resource/umeditor1.2.3/third-party/jquery.min.js"></script>
+          <script type="text/javascript" src="/resource/umeditor1.2.3/third-party/template.min.js"></script>
+          <script type="text/javascript" charset="utf-8" src="/resource/umeditor1.2.3/umeditor.config.js"></script>
+          <script type="text/javascript" charset="utf-8" src="/resource/umeditor1.2.3/umeditor.min.js"></script>
+          <script type="text/javascript" src="/resource/umeditor1.2.3/lang/zh-cn/zh-cn.js"></script>
+
+<script>
+
+    var um = UM.getEditor('myEditor');
+    um.addListener( 'ready', function( editor ) {
+
+    } );
+
+
+   $(function () {
+
+       var type=$("#baseType");
+
+
+       $.post("/cpbase/base/get",{"type":type.val()},function (data) {
+           var form = type.parents("form");
+           var data = data.resultData;
+           form.find("textarea[name='content']").val(data.content.cont);
+           form.find("input[name='id']").val(data.id);
+           form.find("input[name='imgurl']").val(data.content.img);
+           form.find("img").attr("src",data.content.img).show();
+           if(!data.content.cont){
+               return;
+           }
+           um.setContent(data.content.cont);
+
+       })
+
+       $("#baseCpBut").click(function () {
+           var form =$(this).parents("form");
+           form.removeAttr("enctype");
+           var content = um.getContent();
+           form.find("textarea[name='content']").val(content);
+           var datas =form.serialize();
+           $.post("/cpbase/base/add",datas,function (data) {
+
+           })
+       });
+
+       $("#imageupload").change(function () {
+           var form = $(this).parents("form");
+           form.attr("enctype","multipart/form-data");
+           $.ajax({
+               url: '/ueditor/images/upload',
+               type: 'POST',
+               cache: false,
+               data: new FormData(form[0]),
+               processData: false,
+               contentType: false
+           }).done(function(res) {
+
+               form.find("input[name='imgurl']").val($.parseJSON(res).url);
+
+           }).fail(function(res) {
+
+               alert(res);
+
+           });
+       })
+
+
+
+
+   })
+</script>
+</body></html>

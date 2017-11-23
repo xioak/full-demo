@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="renderer" content="webkit">
+    <title>网站信息</title>
+    <link rel="stylesheet" href="css/pintuer.css">
+    <link rel="stylesheet" href="css/admin.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/pintuer.js"></script>
+</head>
+<body>
+
+<div class="panel admin-panel">
+    <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>联系方式列表</strong></div>
+    <div class="body-content">
+        <div class="padding border-bottom">
+            <button type="button" class="button border-green" id="add_panel_but">
+                <span class="icon-plus-square-o"></span>新增
+            </button>
+        </div>
+        <table class="table table-hover text-center">
+            <thead>
+            <tr>
+                <th width="10%">编号</th>
+                <th width="10%">名称</th>
+                <th width="15%">地址</th>
+                <th width="10%">电话</th>
+                <th width="10%">邮箱</th>
+                <th width="10%">邮编</th>
+                <th width="10%">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="panel admin-panel" style="display: none">
+    <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>新增联系方式</strong></div>
+    <div class="body-content">
+        <form method="post" class="form-x" action="">
+
+            <div class="form-group">
+                <div class="label">
+                    <label>名称：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="name" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>地址：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="address" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>电话：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="phone" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>邮箱：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="email" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>邮编：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="code" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" type="submit" id="addBut"> 提交</button>
+                </div>
+            </div>
+
+            <input type="hidden" value="103" name="type">
+            <input type="hidden" value="0" name="id">
+        </form>
+    </div>
+</div>
+
+
+<div class="panel admin-panel margin-top" style="display: none">
+    <div class="panel-head"><strong><span class="icon-pencil-square-o"></span>更新联系方式</strong></div>
+    <div class="body-content">
+        <form method="post" class="form-x" action="">
+
+            <div class="form-group">
+                <div class="label">
+                    <label>名称：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="name" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>地址：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="address" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>电话：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="phone" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>邮箱：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="email" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="label">
+                    <label>邮编：</label>
+                </div>
+                <div class="field">
+                    <input type="text" class="input" name="code" value=""/>
+                    <div class="tips"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label">
+                    <label></label>
+                </div>
+                <div class="field">
+                    <button class="button bg-main icon-check-square-o" type="submit" id="updateBut">更新</button>
+                </div>
+            </div>
+
+            <input type="hidden" value="103" name="type">
+            <input type="hidden" value="0" name="id">
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+
+    var address_App = {
+
+        init: function () {
+
+            this.addr_list();
+
+            var _this = this;
+            $("#add_panel_but").click(function () {
+                var panels = _this.panels;
+                panels.hide().eq(1).show();
+            });
+
+            $("#updateBut").click(function () {
+                _this.addr_update($(this));
+            });
+
+            $("#addBut").click(function () {
+                _this.addr_add($(this));
+            });
+
+        },
+
+        panels:{},
+
+        addr_list: function () {
+
+            this.panels = $("div.panel");
+
+            var _this = this;
+
+            $.get("/cpbase/base/address/list", {"type": "103"}, function (data) {
+                var html="";
+                $.each(data.resultData, function (i, o) {
+                    html +=
+                        '<tr><td>' + o.id + '</td><td>' + o.data.name + '</td><td>'+o.data.name+'</td>'+
+                        '<td>' + o.data.address + '</td><td>' + o.data.phone + '</td><td>'+o.data.email +'</td>'+
+                        '<td>' + o.data.code+ '</td>'+
+                        '<td><div class="button-group"><a class="button border-main" href="javascript:void(0)">' +
+                        '<span class="icon-edit"></span>查看</a> ' +
+                        '<a class="button border-red" href="javascript:void(0)">' +
+                        '<span class="icon-trash-o"></span>删除</a></div></td></tr>';
+
+                });
+                var panel = _this.panels.eq(0);
+                var tbody = panel.find("table").find("tbody").empty().append(html);
+                _this.list_tab_but(tbody);
+
+            });
+        },
+
+        list_tab_but:function (tbody) {
+
+            var panels = this.panels;
+            var _this = this;
+            tbody.find("a.border-main").click(function () {
+                _this.addr_detail($(this), panels);
+            });
+            tbody.find("a.border-red").click(function () {
+                _this.addr_delete($(this), panels);
+            });
+
+        },
+
+        addr_add: function ($this) {
+
+            var form = $this.parents("form");
+            $.post("/cpbase/base/address/add", form.serialize(), function (data) {
+
+            })
+        },
+
+        addr_update: function ($this) {
+
+            var form = $this.parents("form");
+            $.post("/cpbase/base/address/add", form.serialize(), function (data) {
+
+            })
+        },
+
+        addr_delete: function (but,panels) {
+
+            if(!confirm("是否删除该条数据？")){
+                return ;
+            }
+            var id = but.parents("tr").find("td").eq(0).text();
+            $.post("/cpbase/base/cptd/delete", {"id": id,"type":"103"}, function (data) {
+                but.parents("tr").remove();
+                panels.eq(2).hide();
+            });
+
+        },
+
+        addr_detail: function (but,panels) {
+            var id = but.parents("tr").find("td").eq(0).text();
+
+            $.get("/cpbase/base/cptd/get",{"id":id,"type":"103"},function (data) {
+                var panel = panels.eq(2);
+                var form = panel.find("form");
+                var data = data.resultData;
+                form.find("input[name='id']").val(data.info.id);
+                form.find("input[name='name']").val(data.content.name);
+                form.find("input[name='address']").val(data.content.address);
+                form.find("input[name='phone']").val(data.content.phone);
+                form.find("input[name='email']").val(data.content.email);
+                form.find("input[name='code']").val(data.content.code);
+                panel.show();
+            });
+        }
+    }
+
+    $(function () {
+
+
+        address_App.init();
+
+//        $("#addrBut").click(function () {
+//            var form = $(this).parents("form");
+//            $.post("/cpbase/base/address/add", form.serialize(), function (data) {
+//
+//            })
+//        });
+//
+//        $.get("/cpbase/base/address/list", {"type": "103"}, function (data) {
+//
+//            var form = $("#addr_panel").find("form");
+//
+//            $.each(data.resultData, function (i, o) {
+//
+//                var html = '<div class="panel admin-panel" style="margin: 10px 65px; padding: 30px;">'
+//                    + '<p class="lxwm-info1">公司名称：' + o.data.name + '</p>'
+//                    + '<p class="lxwm-info2">公司地址：' + o.data.address + '</p>'
+//                    + '<p class="lxwm-info3">公司电话：' + o.data.phone + '</p>'
+//                    + '<p class="lxwm-info4">公司邮箱：' + o.data.email + '</p>'
+//                    + '<p class="lxwm-info5">公司邮编：' + o.data.code + '</p>'
+//                    + '<div class="form-group"><div class="label"></div>'
+//                    + ' <div class="field">' +
+//                    '<input type="hidden" value="' + o.id + '"><button class="button bg-main ' +
+//                    'icon-check-square-o" type="submit">删除</button>'
+//                    + ' </div></div></div>';
+//
+//                $(html).insertBefore(form);
+//
+//            })
+//
+//
+//        });
+
+
+    })
+
+
+</script>
+
+</body>
+</html>

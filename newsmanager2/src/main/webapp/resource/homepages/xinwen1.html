@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>宏和-关于宏和</title>
+    <link rel="icon" href="img/logo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.min.css">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.min.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .article-box {
+            min-height: 600px;
+            padding-bottom: 20px;
+        }
+
+        .article-box h2 {
+            text-align: center;
+            margin: 40px 0;
+            font-size: 1.8em;
+            line-height: 1.8em;
+        }
+
+        .article-box p {
+            margin: 0;
+            line-height: 30px;
+            font-size: 1.2em;
+            text-indent: 2em;
+            text-align: justify;
+        }
+
+        .article-box img {
+            margin: 10px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body class="body-bg">
+<!--页头-->
+<div class="navbar navbar-default header">
+    <div class="container">
+        <!--导航条头部-->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">
+                <img class="img-responsive" src="img/hh_logo.jpg" alt="logo">
+            </a>
+            <a data-toggle="collapse" class="navbar-toggle" href="#menu">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        <!--导航栏折叠部分-->
+        <div id="menu" class="navbar-collapse collapse">
+            <!--折叠导航菜单-->
+            <ul class="nav navbar-nav ie-8">
+                <li><a href="index.html">首页</a></li>
+                <li class="sub">
+                    <a href="guanyuhonghe.html">关于宏和</a>
+                    <ul class="nav nav-pills nav-stacked sub-nav">
+                        <li><a href="guanyuhonghe.html?index=0">公司简介</a></li>
+                        <li><a href="guanyuhonghe.html?index=1">企业文化</a></li>
+                        <li><a href="guanyuhonghe.html?index=2">团队介绍</a></li>
+                    </ul>
+                </li>
+                <li class="sub">
+                    <a href="xiangmufangan.html">项目方案</a>
+                    <ul class="nav nav-pills nav-stacked sub-nav">
+                        <li><a href="xiangmufangan.html?index=3">产品介绍</a></li>
+                        <li><a href="xiangmufangan.html?index=4">产品特点</a></li>
+                    </ul>
+                </li>
+                <li class="sub">
+                    <a href="xinwenzhongxin.html">新闻中心</a>
+                    <ul class="nav nav-pills nav-stacked sub-nav">
+                        <li><a href="xinwenzhongxin.html?index=5">公司新闻</a></li>
+                        <li><a href="xinwenzhongxin.html?index=6">行业资讯</a></li>
+                        <li><a href="xinwenzhongxin.html?index=7">最新报价</a></li>
+                    </ul>
+                </li>
+                <li class="sub">
+                    <a href="lianxiwomen.html">联系我们</a>
+                    <ul class="nav nav-pills nav-stacked sub-nav">
+                        <li><a href="lianxiwomen.html?index=8">联系方式</a></li>
+                        <li><a href="lianxiwomen.html?index=9">留言板</a></li>
+                    </ul>
+                </li>
+                <li><a href="http://120.76.228.92:8080/hhscf-admin/login">登录端口</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!--主体-->
+<div class="about-slide">
+    <img src="img/banner/about_ban.jpg" alt="about">
+</div>
+<div class="container">
+    <div class="article-box">
+        <h2 class="title">宏和与广东万和新电气股份有限公司达成合作意向</h2>
+        <p>2016年6月，宏和与广东万和新电气股份有限公司达成合作意向，双方就万和供应链金融作了友好的交流与探讨，并就双方合作的模式及方案达成一致意见。</p>
+        <p>同月，宏和工作人员正式进驻万和集团总部开启复式供应链项目，成为其供应链金融管理战略合作伙伴。</p>
+        <img src="img/news/xinwen1.png" alt="新闻图片">
+    </div>
+</div>
+<!--页尾-->
+<div class="footer">
+    <p>Copyright ©：珠海宏和供应链服务有限公司</p>
+</div>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/index.min.js"></script>
+<script src="js/home_api.js"></script>
+
+<script>
+
+    $(function () {
+        var url = window.location.href;
+        var id = url.split("?")[1].split("=")[1];
+        var box = $("div.article-box");
+
+        $.get(home_api_data.getparam.host+"/content/get",{"id":id},function (data) {
+            box.empty().html('<h2>'+data.resultData.title+'</h2>');
+            box.append(data.resultData.content);
+        })
+    })
+
+</script>
+
+
+</body>
+</html>
